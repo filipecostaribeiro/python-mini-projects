@@ -4,16 +4,23 @@ def game_loop(window):
     # Initial setup
     curses.curs_set(0)
     character = [10,15]
+    keepdirection = None
 
     # loop start
     while True:
         draw_screen(window)
         draw_actor(character, window)
-        direction = get_new_direction(window, timeout = 4000)
+        direction = get_new_direction(window, timeout = 100)
         if direction != None:
             move_actor(character, direction)
-            if actor_hit_border(character,window):
-                return
+            keepdirection = direction
+        else:
+            if keepdirection != None:
+                move_actor(character, keepdirection)
+            else:
+                continue
+        if actor_hit_border(character,window):
+            return
         
 
 
