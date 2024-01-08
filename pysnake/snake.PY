@@ -1,41 +1,62 @@
 import curses
 
+
 def game_loop(window):
-    # Sets the cursor visibility to invisible.
+    # Setup inicial
     curses.curs_set(0)
-    # Draw a border around a window with a default border style.
-    window.border(0)
-    height = window.getmaxyx()[0]
-    width = window.getmaxyx()[1]
+    personagem = [10, 15]
 
-
-
-    character = [10,15]
-    window.addch(character[0], character[1],"@")
+    # Loop do jogo
     while True:
-        # function to return that no key was pressed after 1000 mile seconds
-        window.timeout(3000)
-        # get a character, program only continues after type something
-        char = window.getch()
-        window.clear()
-        window.border(0)
-        if char == curses.KEY_UP:
-            character[0] -= 1
-        elif char == curses.KEY_DOWN:
-            character[0] +=1
-        elif char == curses.KEY_LEFT:
-            character[1] -= 1
-        elif char == curses.KEY_RIGHT:
-            character[1] +=1
-        else:
-            pass
-        if character[0] <= 0 or character[0] >= height-1:
+        draw_screen(window=window)
+        draw_actor(actor=personagem, window=window)
+        direction = get_new_direction(window=window, timeout=1000)
+        if direction is not None:
+            move_actor(actor=personagem, direction=direction)
+        if actor_hit_border(actor=personagem, window=window):
             return
-        if character[1] <= 0 or character[1] >= width-1:
-            return
-        
-        window.addch(character[0], character[1],"@")
 
-    
-curses.wrapper(game_loop)
-print("perdeu")
+
+def get_new_direction(window, timeout):
+    window.timeout(timeout)
+    direction = window.getch()
+    if direction in [curses.KEY_UP, curses.KEY_LEFT, curses.KEY_DOWN, curses.KEY_RIGHT]:
+        return direction
+    return None
+
+
+def move_actor(actor, direction):
+    match direction:
+        case curses.KEY_UP:
+            actor[0] -= 1
+        case curses.KEY_LEFT:
+            actor[1] -= 1
+        case curses.KEY_DOWN:
+            actor[0] += 1
+        case curses.KEY_RIGHT:
+            actor[1] += 1
+
+
+def actor_hit_border(actor, window):
+    height, width = window.getmaxyx()
+    # EIXO VERTICAL
+    if (actor[0] <= 0) or (actor[0] >= (height - 1)):
+        return True
+    # EIXO HORIZONTAL
+    if (actor[1] <= 0) or (actor[1] >= (width - 1)):
+        return True
+    return False
+
+
+def draw_screen(window):
+    window.clear()
+    window.border(0)
+
+
+def draw_actor(actor, window):
+    window.addch(actor[0], actor[1], curses.ACS_DIAMOND)
+
+
+if __name__ == '__main__':
+    curses.wrapper(game_loop)
+    print('Perdeu!')
