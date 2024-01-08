@@ -59,4 +59,4 @@ def draw_actor(actor, window):
 
 if __name__ == '__main__':
     curses.wrapper(game_loop)
-    print('Perdeu!')
+    print('you lose!!!')
