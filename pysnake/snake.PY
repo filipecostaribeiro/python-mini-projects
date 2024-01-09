@@ -17,6 +17,9 @@ def game_loop(window):
         draw_fruit(window, fruit)
         head = snake[0].copy()
         direction = get_new_direction(window, timeout = 100)
+        if oposite_direction(direction,snake, head) == True:
+            direction = None
+
         if direction != None:
             move_actor(head, direction)
             keepdirection = direction
@@ -27,11 +30,23 @@ def game_loop(window):
                 continue
         if actor_hit_border(head,window):
             return
+        if head in snake:
+            return
         update_snake(snake,head,fruit)
         if fruit in snake:
             snake.insert(0,head)
             fruit_location(window, fruit, snake)
         
+
+
+def oposite_direction(direction, snake, head):
+    fake_head = head.copy()
+    if direction == None:
+        return
+    else:
+        move_actor(fake_head, direction)
+        if fake_head == snake[1]:
+            return True
 
 
 def fruit_location(window, fruit, snake):
@@ -50,10 +65,6 @@ def draw_fruit(window, fruit):
     window.addch(fruit[0], fruit[1], curses.ACS_DIAMOND)
     window.refresh()
             
-            
-
-
-
 def update_snake(snake,head,fruit):
     if fruit in snake:
         snake.insert(0,head)
