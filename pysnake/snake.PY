@@ -27,9 +27,8 @@ def game_loop(window):
                 continue
         if actor_hit_border(head,window):
             return
-        update_snake(snake,head,fruit)
+        update_snake(snake,head)
         if fruit in snake:
-            snake.insert(0,head)
             fruit_location(window, fruit, snake)
         
 
@@ -54,12 +53,9 @@ def draw_fruit(window, fruit):
 
 
 
-def update_snake(snake,head,fruit):
-    if fruit in snake:
-        snake.insert(0,head)
-    else:
-        snake.insert(0,head)
-        snake.pop()
+def update_snake(snake,head):
+    snake.insert(0,head)
+    snake.pop()
 
 def draw_screen(window):
     """ Prompts a clear window and create a border to play inside."""
