@@ -1,16 +1,20 @@
 import curses
+import random
  
 def game_loop(window):
     # Initial setup
     curses.curs_set(0)
     snake = [[10,15],[10,16],[10,17],[10,18]]
     head = snake[0].copy()
+    fruit=[1,2]
     keepdirection = None
+    fruit_location(window, fruit, snake)
 
     # loop start
     while True:
         draw_screen(window)
         draw_actor(snake, window)
+        draw_fruit(window, fruit)
         head = snake[0].copy()
         direction = get_new_direction(window, timeout = 100)
         if direction != None:
@@ -24,7 +28,28 @@ def game_loop(window):
         if actor_hit_border(head,window):
             return
         update_snake(snake,head)
+        if fruit in snake:
+            fruit_location(window, fruit, snake)
         
+
+
+def fruit_location(window, fruit, snake):
+    while True:
+        height = window.getmaxyx()[0]
+        width = window.getmaxyx()[1]
+        y = random.randint(2, height-2)
+        x = random.randint(2, width-2)
+        fruit[0]=y
+        fruit[1]=x
+        if fruit in snake:
+            continue
+        else:
+            break
+def draw_fruit(window, fruit):
+    window.addch(fruit[0], fruit[1], curses.ACS_DIAMOND)
+    window.refresh()
+            
+            
 
 
 
@@ -47,23 +72,23 @@ def draw_actor(snake, window):
 def get_new_direction(window, timeout):
     window.timeout(timeout)
     direction = window.getch()
-    if direction in [450,456,454,452]:
+    if direction in [450,456,454,452, curses.KEY_UP, curses.KEY_DOWN, curses.KEY_LEFT,curses.KEY_RIGHT]:
          return direction
     else:
          return None
 
 def move_actor(actor, direction):
     #arrow up
-    if direction == 450:
+    if direction == 450 or direction == curses.KEY_UP:
             actor[0] -= 1
     # arrow down
-    elif direction == 456:
+    elif direction == 456 or direction == curses.KEY_DOWN:
         actor[0] +=1
     # arrow left
-    elif direction == 452:
+    elif direction == 452 or direction == curses.KEY_LEFT:
         actor[1] -= 1
     # arrow right
-    elif direction == 454:
+    elif direction == 454 or direction == curses.KEY_RIGHT:
         actor[1] +=1
         
 def actor_hit_border(actor, window):
