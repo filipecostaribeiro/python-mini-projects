@@ -3,26 +3,34 @@ import curses
 def game_loop(window):
     # Initial setup
     curses.curs_set(0)
-    character = [10,15]
+    snake = [[10,15],[10,16],[10,17],[10,18]]
+    head = snake[0].copy()
     keepdirection = None
 
     # loop start
     while True:
         draw_screen(window)
-        draw_actor(character, window)
+        draw_actor(snake, window)
+        head = snake[0].copy()
         direction = get_new_direction(window, timeout = 100)
         if direction != None:
-            move_actor(character, direction)
+            move_actor(head, direction)
             keepdirection = direction
         else:
             if keepdirection != None:
-                move_actor(character, keepdirection)
+                move_actor(head, keepdirection)
             else:
                 continue
-        if actor_hit_border(character,window):
+        if actor_hit_border(head,window):
             return
+        update_snake(snake,head)
         
 
+
+
+def update_snake(snake,head):
+    snake.insert(0,head)
+    snake.pop()
 
 def draw_screen(window):
     """ Prompts a clear window and create a border to play inside."""
@@ -30,9 +38,10 @@ def draw_screen(window):
     window.border(0)
     window.refresh()
 
-def draw_actor(actor, window):
+def draw_actor(snake, window):
     """ print the actor in its position"""
-    window.addch(actor[0], actor[1], curses.ACS_DIAMOND)
+    for piece in snake:
+        window.addch(piece[0], piece[1], curses.ACS_DIAMOND)
     window.refresh()
 
 def get_new_direction(window, timeout):
