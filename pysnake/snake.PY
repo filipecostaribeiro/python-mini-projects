@@ -28,17 +28,6 @@ def main():
         if command == "0":
             curses.wrapper(game_loop)
             score_handle(fruit_count)
-            score = pd.read_csv("pysnake\scores.csv")
-            save_score = input("would you like to save your score? [y][n]")
-            if save_score == "y":
-                name = input("name")
-                current_directory = os.path.abspath(os.path.dirname(__file__))
-                file_path = os.path.join(current_directory, "scores.csv")
-                score = pd.read_csv(file_path, index_col=0)
-                new_score = {"Position":[], "Name":[name], "Fruits":[fruit_count],"Date":[datetime.now().strftime("%Y-%m-%d %H:%M:%S")]}
-                df = pd.DataFrame(new_score)
-                score = pd.concat([score, df],ignore_index=True,axis=0)
-                score.to_csv(file_path)
         if command == "1":
             display_ranking()
             # ranking menu
@@ -51,14 +40,21 @@ def main():
                 reset_score()
                 continue
 
-def save_score(fruit_count):
+def save_score(fruit_count,position):
     name = input("name")
     current_directory = os.path.abspath(os.path.dirname(__file__))
     file_path = os.path.join(current_directory, "scores.csv")
     score = pd.read_csv(file_path, index_col=0)
-    new_score = {"Position":[], "Name":[name], "Fruits":[fruit_count],"Date":[datetime.now().strftime("%Y-%m-%d %H:%M:%S")]}
+    new_score = {"Position":[position], "Name":[name], "Fruits":[fruit_count],"Date":[datetime.now().strftime("%Y-%m-%d %H:%M:%S")]}
     df = pd.DataFrame(new_score)
     score = pd.concat([score, df],ignore_index=True,axis=0)
+    score = score.sort_values(by="Date", ascending=False).sort_values(by="Fruits", ascending=False)
+    score = score.head(5)
+    score.reset_index(inplace=True,drop = True)
+    score.reset_index(inplace=True)
+    score = score.drop('Position', axis=1)
+    score.rename(columns={'index': 'Position'}, inplace=True)
+    score.Position = score.Position.map(lambda p: p + 1)
     score.to_csv(file_path)
 
 
@@ -72,26 +68,26 @@ def score_handle(fruit_count):
     if position == 0:
         print(f"You lose, your total points are {fruit_count} and you are not at top 5")
     else:
-        print(f"Congratulations you are on the top 5 at position {position + 1}")
-        save_score()
+        print(f"Congratulations you are on the top 5 at position {position}")
+        save_score(fruit_count,position)
 
     
 
 def return_position(score_list, fruit_count):
     size = len(score_list)
     if size <5:
-        l.append(fruit_count)
-        l.sort(reverse = True)
-        position = l.index(fruit_count)
-        return position
+        score_list.append(fruit_count)
+        score_list.sort(reverse = True)
+        position = score_list.index(fruit_count)
+        return position+1
     
     else:
-        if fruit_count > min(l):
-            l.append(fruit_count)
-            l.sort(reverse = True)
-            l.pop()
-            position = l.index(fruit_count)
-            return position
+        if fruit_count > min(score_list):
+            score_list.append(fruit_count)
+            score_list.sort(reverse = True)
+            score_list.pop()
+            position = score_list.index(fruit_count)
+            return position +1
             
         else:
             position = 0
@@ -101,10 +97,9 @@ def return_position(score_list, fruit_count):
 
 
 
-def save_score():
-    pass
+
 def reset_score():
-    blank_df = {"position":[], "name":[], "Fruits":[],"Date":[]}
+    blank_df = {"Position":[], "Name":[], "Fruits":[],"Date":[]}
     df = pd.DataFrame(blank_df)
     current_directory = os.path.abspath(os.path.dirname(__file__))
     file_path = os.path.join(current_directory, "scores.csv")
