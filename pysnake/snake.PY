@@ -23,7 +23,7 @@ def main():
         
     menu()
     command = input("Command: ")
-    if command == 0:
+    if command == "0":
         curses.wrapper(game_loop)
     print('you lose')
     print(f"your score is {fruit_count} fruits")
