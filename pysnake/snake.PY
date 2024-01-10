@@ -28,6 +28,7 @@ def main():
             curses.wrapper(game_loop)
             print('you lose')
             print(f"your score is {fruit_count} fruits")
+            check_score(fruit_count)
             score = pd.read_csv("pysnake\scores.csv")
             save_score = input("would you like to save your score? [y][n]")
             if save_score == "y":
@@ -51,7 +52,12 @@ def main():
                 reset_score()
                 continue
         
-def check_score():
+def check_score(fruit_count):
+    current_directory = os.path.abspath(os.path.dirname(__file__))
+    file_path = os.path.join(current_directory, "scores.csv")
+    df = pd.read_csv(file_path, index_col=0)
+    l = df["Fruits"].tolist()
+    
     pass
 
 def save_score():
@@ -62,6 +68,7 @@ def reset_score():
     current_directory = os.path.abspath(os.path.dirname(__file__))
     file_path = os.path.join(current_directory, "scores.csv")
     df.to_csv(file_path)
+
 
 
 
