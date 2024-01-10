@@ -3,6 +3,7 @@ import curses
 import random
 import os
 from datetime import datetime
+from tabulate import tabulate
 
 def main():
 
@@ -20,25 +21,63 @@ def main():
                 # yes to confirm and return to menu.
                 # no to return
         # quit
+    while True:   
+        menu()
+        command = input("Command: ")
+        if command == "0":
+            curses.wrapper(game_loop)
+            print('you lose')
+            print(f"your score is {fruit_count} fruits")
+            score = pd.read_csv("pysnake\scores.csv")
+            save_score = input("would you like to save your score? [y][n]")
+            if save_score == "y":
+                name = input("name")
+                current_directory = os.path.abspath(os.path.dirname(__file__))
+                file_path = os.path.join(current_directory, "scores.csv")
+                score = pd.read_csv(file_path, index_col=0)
+                new_score = {"Position":[], "Name":[name], "Fruits":[fruit_count],"Date":[datetime.now().strftime("%Y-%m-%d %H:%M:%S")]}
+                df = pd.DataFrame(new_score)
+                score = pd.concat([score, df],ignore_index=True,axis=0)
+                score.to_csv(file_path)
+        if command == "1":
+            display_ranking()
+            # ranking menu
+            print("return to menu [0]")
+            print("reset ranking [1]")
+            command = input("")
+            if command == "0":
+                continue
+            elif command == "1":
+                reset_score()
+                continue
         
-    menu()
-    command = input("Command: ")
-    if command == "0":
-        curses.wrapper(game_loop)
-    print('you lose')
-    print(f"your score is {fruit_count} fruits")
-    score = pd.read_csv("pysnake\scores.csv")
-    save_score = input("would you like to save your score? [y][n]")
-    if save_score == "y":
-        name = input("name")
-        current_directory = os.path.abspath(os.path.dirname(__file__))
-        file_path = os.path.join(current_directory, "scores.csv")
-        score = pd.read_csv(file_path, index_col=0)
-        new_score = {"date":[datetime.now().strftime("%Y-%m-%d %H:%M:%S")], "name":[name], "score":[fruit_count]}
-        df = pd.DataFrame(new_score)
-        score = pd.concat([score, df],ignore_index=True,axis=0)
-        score.to_csv(file_path)
+def check_score():
+    pass
 
+def save_score():
+    pass
+def reset_score():
+    blank_df = {"position":[], "name":[], "Fruits":[],"Date":[]}
+    df = pd.DataFrame(blank_df)
+    current_directory = os.path.abspath(os.path.dirname(__file__))
+    file_path = os.path.join(current_directory, "scores.csv")
+    df.to_csv(file_path)
+
+
+
+
+
+def display_ranking():
+    # Get the path to the csv file
+    current_directory = os.path.abspath(os.path.dirname(__file__))
+    file_path = os.path.join(current_directory, "scores.csv")
+
+    # import the csv file as a dataframe to pandas.
+    df = pd.read_csv(file_path, index_col=0)
+
+    # Display the DataFrame using tabulate library
+    table = tabulate(df, headers='keys', tablefmt='grid')
+    print(table)
 
 
 def menu():
