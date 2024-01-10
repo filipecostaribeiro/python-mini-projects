@@ -3,6 +3,44 @@ import curses
 import random
 import os
 from datetime import datetime
+
+def main():
+
+    # menu
+        # start
+            # start game
+            # when you lose
+                # ask if user want to save score
+                # play again
+                # return to menu.
+        # ranking
+            # "show top 5"
+            # return to menu
+            # reset score
+                # yes to confirm and return to menu.
+                # no to return
+        # quit
+        
+
+    curses.wrapper(game_loop)
+    print('you lose')
+    print(f"your score is {fruit_count} fruits")
+    score = pd.read_csv("pysnake\scores.csv")
+    save_score = input("would you like to save your score? [y][n]")
+    if save_score == "y":
+        name = input("name")
+        current_directory = os.path.abspath(os.path.dirname(__file__))
+        file_path = os.path.join(current_directory, "scores.csv")
+        score = pd.read_csv(file_path, index_col=0)
+        new_score = {"date":[datetime.now().strftime("%Y-%m-%d %H:%M:%S")], "name":[name], "score":[fruit_count]}
+        df = pd.DataFrame(new_score)
+        score = pd.concat([score, df],ignore_index=True,axis=0)
+        score.to_csv(file_path)
+
+
+
+
+
 def game_loop(window):
     # Initial setup
     curses.curs_set(0)
@@ -121,20 +159,8 @@ def actor_hit_border(actor, window):
          return False
 
 if __name__ == '__main__':
-    curses.wrapper(game_loop)
-    print('you lose')
-    print(f"your score is {fruit_count} fruits")
-    score = pd.read_csv("pysnake\scores.csv")
-    save_score = input("would you like to save your score? [y][n]")
-    if save_score == "y":
-        name = input("name")
-        current_directory = os.path.abspath(os.path.dirname(__file__))
-        file_path = os.path.join(current_directory, "scores.csv")
-        score = pd.read_csv(file_path, index_col=0)
-        new_score = {"date":[datetime.now().strftime("%Y-%m-%d %H:%M:%S")], "name":[name], "score":[fruit_count]}
-        df = pd.DataFrame(new_score)
-        score = pd.concat([score, df],ignore_index=True,axis=0)
-        score.to_csv(file_path)
+    main()
+
 
     
 
