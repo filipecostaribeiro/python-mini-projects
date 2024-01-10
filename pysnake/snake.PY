@@ -21,8 +21,10 @@ def main():
                 # no to return
         # quit
         
-
-    curses.wrapper(game_loop)
+    menu()
+    command = input("Command: ")
+    if command == 0:
+        curses.wrapper(game_loop)
     print('you lose')
     print(f"your score is {fruit_count} fruits")
     score = pd.read_csv("pysnake\scores.csv")
@@ -39,6 +41,33 @@ def main():
 
 
 
+def menu():
+    snake = r"""
+           /^\/^\
+         _|__|  O|
+\/     /~     \_/ \
+ \____|__________/  \
+        \_______      \
+                `\     \                 \
+                  |     |                  \
+                 /      /                    \
+                /     /                       \\
+              /      /                         \ \
+             /     /                            \  \
+           /     /             _----_            \   \
+          /     /           _-~      ~-_         |   |
+         (      (        _-~    _--_    ~-_     _/   |
+          \      ~-____-~    _-~    ~-_    ~-_-~    /
+            ~-_           _-~          ~-_       _-~
+               ~--______-~                ~-___-~
+
+               """
+
+    print(snake) 
+    print("Start[0]")
+    print("Ranking[1]") 
+    print("Quit[2]")   
+    
 
 
 def game_loop(window):
