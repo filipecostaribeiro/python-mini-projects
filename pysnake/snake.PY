@@ -1,6 +1,8 @@
+import pandas as pd
 import curses
 import random
- 
+import os
+from datetime import datetime
 def game_loop(window):
     # Initial setup
     curses.curs_set(0)
@@ -9,7 +11,8 @@ def game_loop(window):
     fruit=[1,2]
     keepdirection = None
     fruit_location(window, fruit, snake)
-
+    global fruit_count 
+    fruit_count = 0
     # loop start
     while True:
         draw_screen(window)
@@ -35,6 +38,7 @@ def game_loop(window):
         update_snake(snake,head,fruit)
         if fruit in snake:
             snake.insert(0,head)
+            fruit_count +=1
             fruit_location(window, fruit, snake)
         
 
@@ -119,6 +123,19 @@ def actor_hit_border(actor, window):
 if __name__ == '__main__':
     curses.wrapper(game_loop)
     print('you lose')
+    print(f"your score is {fruit_count} fruits")
+    score = pd.read_csv("pysnake\scores.csv")
+    save_score = input("would you like to save your score? [y][n]")
+    if save_score == "y":
+        name = input("name")
+        current_directory = os.path.abspath(os.path.dirname(__file__))
+        file_path = os.path.join(current_directory, "scores.csv")
+        score = pd.read_csv(file_path, index_col=0)
+        new_score = {"date":[datetime.now().strftime("%Y-%m-%d %H:%M:%S")], "name":[name], "score":[fruit_count]}
+        df = pd.DataFrame(new_score)
+        score = pd.concat([score, df],ignore_index=True,axis=0)
+        score.to_csv(file_path)
+
     
 
 
