@@ -11,7 +11,8 @@ def main():
         # start
             # start game
             # when you lose
-                # ask if user want to save score
+                # check if score is in top 5
+                    # save name if true
                 # play again
                 # return to menu.
         # ranking
@@ -26,9 +27,7 @@ def main():
         command = input("Command: ")
         if command == "0":
             curses.wrapper(game_loop)
-            print('you lose')
-            print(f"your score is {fruit_count} fruits")
-            check_score(fruit_count)
+            score_handle(fruit_count)
             score = pd.read_csv("pysnake\scores.csv")
             save_score = input("would you like to save your score? [y][n]")
             if save_score == "y":
@@ -51,14 +50,56 @@ def main():
             elif command == "1":
                 reset_score()
                 continue
-        
-def check_score(fruit_count):
+
+def save_score(fruit_count):
+    name = input("name")
+    current_directory = os.path.abspath(os.path.dirname(__file__))
+    file_path = os.path.join(current_directory, "scores.csv")
+    score = pd.read_csv(file_path, index_col=0)
+    new_score = {"Position":[], "Name":[name], "Fruits":[fruit_count],"Date":[datetime.now().strftime("%Y-%m-%d %H:%M:%S")]}
+    df = pd.DataFrame(new_score)
+    score = pd.concat([score, df],ignore_index=True,axis=0)
+    score.to_csv(file_path)
+
+
+
+def score_handle(fruit_count):
     current_directory = os.path.abspath(os.path.dirname(__file__))
     file_path = os.path.join(current_directory, "scores.csv")
     df = pd.read_csv(file_path, index_col=0)
     l = df["Fruits"].tolist()
+    position = return_position(l,fruit_count)
+    if position == 0:
+        print(f"You lose, your total points are {fruit_count} and you are not at top 5")
+    else:
+        print(f"Congratulations you are on the top 5 at position {position + 1}")
+        save_score()
+
     
-    pass
+
+def return_position(score_list, fruit_count):
+    size = len(score_list)
+    if size <5:
+        l.append(fruit_count)
+        l.sort(reverse = True)
+        position = l.index(fruit_count)
+        return position
+    
+    else:
+        if fruit_count > min(l):
+            l.append(fruit_count)
+            l.sort(reverse = True)
+            l.pop()
+            position = l.index(fruit_count)
+            return position
+            
+        else:
+            position = 0
+            return position
+            
+
+
+
 
 def save_score():
     pass
