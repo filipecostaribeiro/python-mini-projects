@@ -72,6 +72,7 @@ def score_handle(fruit_count):
     if position == 0:
         clear_terminal()
         print(f"You lose, your total points are {fruit_count} and you are not at top 5")
+        time.sleep(3)
     else:
         clear_terminal()
         print(f"Congratulations you are on the top 5 at position {position}")
@@ -230,6 +231,8 @@ def update_snake(snake,head,fruit):
     else:
         snake.insert(0,head)
         snake.pop()
+    return snake
+    
 
 def draw_screen(window):
     """ Prompts a clear window and create a border to play inside."""
@@ -265,6 +268,7 @@ def move_actor(actor, direction):
     # arrow right
     elif direction == 454 or direction == curses.KEY_RIGHT:
         actor[1] +=1
+    return actor
         
 def actor_hit_border(actor, window):
     height = window.getmaxyx()[0]
