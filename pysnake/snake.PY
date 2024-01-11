@@ -5,6 +5,7 @@ import os
 from datetime import datetime
 from tabulate import tabulate
 import sys
+import time
 
 def main():
 
@@ -13,6 +14,9 @@ def main():
         menu()
         command = input("Command: ")
         if command == "0":
+            clear_terminal()
+            print("Use the arrow keys to start!!!")
+            time.sleep(2)
             curses.wrapper(game_loop)
             score_handle(fruit_count)
         elif command == "1":
@@ -235,7 +239,8 @@ def draw_screen(window):
 
 def draw_actor(snake, window):
     """ print the actor in its position"""
-    for piece in snake:
+    window.addch(snake[0][0], snake[0][1], "@")
+    for piece in snake[1:]:
         window.addch(piece[0], piece[1], curses.ACS_DIAMOND)
     window.refresh()
 
