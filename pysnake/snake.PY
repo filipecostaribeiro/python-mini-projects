@@ -4,44 +4,44 @@ import random
 import os
 from datetime import datetime
 from tabulate import tabulate
+import sys
 
 def main():
 
-    # menu
-        # start
-            # start game
-            # when you lose
-                # check if score is in top 5
-                    # save name if true
-                # play again
-                # return to menu.
-        # ranking
-            # "show top 5"
-            # return to menu
-            # reset score
-                # yes to confirm and return to menu.
-                # no to return
-        # quit
-    while True:   
+    while True:
+        clear_terminal()   
         menu()
         command = input("Command: ")
         if command == "0":
             curses.wrapper(game_loop)
             score_handle(fruit_count)
-        if command == "1":
+        elif command == "1":
+            clear_terminal() 
             display_ranking()
             # ranking menu
-            print("return to menu [0]")
-            print("reset ranking [1]")
-            command = input("")
+            print("Return to menu [0]")
+            print("Reset ranking [1]\n")
+            command = input("Command: ")
             if command == "0":
                 continue
             elif command == "1":
                 reset_score()
                 continue
+        elif command == "2":
+            clear_terminal()
+            sys.exit()
+
+
+
+def clear_terminal():
+    # Check the operating system and use the appropriate command
+    if os.name == 'posix':  # Linux and macOS
+        os.system('clear')
+    elif os.name == 'nt':   # Windows
+        os.system('cls')
 
 def save_score(fruit_count,position):
-    name = input("name")
+    name = input("Name: ")
     current_directory = os.path.abspath(os.path.dirname(__file__))
     file_path = os.path.join(current_directory, "scores.csv")
     score = pd.read_csv(file_path, index_col=0)
@@ -66,8 +66,10 @@ def score_handle(fruit_count):
     l = df["Fruits"].tolist()
     position = return_position(l,fruit_count)
     if position == 0:
+        clear_terminal()
         print(f"You lose, your total points are {fruit_count} and you are not at top 5")
     else:
+        clear_terminal()
         print(f"Congratulations you are on the top 5 at position {position}")
         save_score(fruit_count,position)
 
@@ -146,9 +148,9 @@ def menu():
                """
 
     print(snake) 
-    print("Start[0]")
-    print("Ranking[1]") 
-    print("Quit[2]")   
+    print("Start [0]")
+    print("Ranking [1]") 
+    print("Quit [2]\n")   
     
 
 
