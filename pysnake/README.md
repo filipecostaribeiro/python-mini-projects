@@ -1,7 +1,7 @@
 # Snake Game in Terminal
 
-![Alt Text]([Images/Menu.jpg](https://github.com/filipecostaribeiro/python-mini-projects/blob/main/pysnake/Images/Menu.JPG))
-![Alt Text](Images/Game.jpg)
+![Alt Text](https://github.com/filipecostaribeiro/python-mini-projects/blob/main/pysnake/Images/Menu.JPG)
+![Alt Text](https://github.com/filipecostaribeiro/python-mini-projects/blob/main/pysnake/Images/Game.JPG)
 ![Alt Text](Images/Ranking.jpg)
 ## Description
 
