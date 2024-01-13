@@ -2,7 +2,7 @@
 
 ![Alt Text](https://github.com/filipecostaribeiro/python-mini-projects/blob/main/pysnake/Images/Menu.JPG)
 ![Alt Text](https://github.com/filipecostaribeiro/python-mini-projects/blob/main/pysnake/Images/Game.JPG)
-![Alt Text](Images/Ranking.jpg)
+![Alt Text](https://github.com/filipecostaribeiro/python-mini-projects/blob/main/pysnake/Images/Ranking.JPG)
 ## Description
 
 Welcome to the Snake Game in the terminal! This simple yet entertaining project allows you to play the classic Snake game right in your terminal. The game includes a score tracking system and a ranking feature to spice up the competition.
