@@ -1,0 +1,28 @@
+# Snake Game in Terminal
+
+[![Snake Game Demo](https://img.youtube.com/vi/unpQlmfQtxE/0.jpg)](https://youtu.be/unpQlmfQtxE)<br>
+<https://youtu.be/unpQlmfQtxE>
+
+## Description
+
+Welcome to the Snake Game in the terminal! This simple yet entertaining project allows you to play the classic Snake game right in your terminal. The game includes a score tracking system and a ranking feature to spice up the competition.
+
+## How to Play
+
+To start the game, execute the `project.py` file. Make sure you have all the necessary libraries installed by running:
+pip install -r requirements.txt<br>
+Navigate through the terminal using arrow keys to control the snake. The goal is to eat the food and grow your snake without colliding with the walls or yourself. The longer you survive and the more food you consume, the higher your score.
+
+## Score Tracking
+
+Scores are recorded and stored in the scores.csv file. You can check your past performance and compete with friends to reach the top of the leaderboard.
+
+## Unit Testing
+
+A set of unit tests is provided in the test_project.py file, utilizing the pytest library. Ensure that your game functions correctly by running the tests: pytest test_project.py
+
+## Contact
+If you have any questions or need assistance, feel free to contact the project maintainer:
+
+Email: filipe.costaribeiro2@gmail.com
+Enjoy playing the Snake Game in your terminal! 🐍🕹️
